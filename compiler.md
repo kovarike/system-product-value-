@@ -32,3 +32,7 @@ tasks.json - {
 
 gcc -o meu_programa meu_programa.c -I<path_para_cabecalhos> -L<path_para_biblioteca> -ljson-c
 gcc -o test test.c -IC:\\msys64\\mingw64\\include -IC:\\msys64\\mingw64\\include\\json-c -LC:\\msys64\\mingw64\\lib -ljson-c
+
+node js/user-login.js salvar "Nome" "email@example.com" "senha123" "12345678901234"
+./programa
+gcc -o programa main.c -lws2_32
