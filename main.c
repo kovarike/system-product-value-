@@ -58,6 +58,7 @@
 // #include <stdlib.h>
 // #include <string.h>
  #include <windows.h>
+ #include <locale.h>
 // #include "../include/login.h"
 
 // #define SCRIPT_PATH "./js/user-login.js"
@@ -291,6 +292,7 @@ int login() {
 
 // Função principal
 int main() {
+    setlocale(LC_CTYPE, "Portuguese_Brazil.1252");
     int codigo;
     float preco_custo;
     float preco_novo;

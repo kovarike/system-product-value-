@@ -7,5 +7,10 @@
         "stdio.h": "c",
         "buffer.h": "c"
     },
-    "cmake.sourceDirectory": "C:/Users/PID UFOP/Documents/www/com/clone/json-c"
+    "cmake.sourceDirectory": "C:/Users/PID UFOP/Documents/www/com/clone/json-c",
+    
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": true
+    
+    
 }

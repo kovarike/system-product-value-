@@ -36,3 +36,21 @@ gcc -o test test.c -IC:\\msys64\\mingw64\\include -IC:\\msys64\\mingw64\\include
 node js/user-login.js salvar "Nome" "email@example.com" "senha123" "12345678901234"
 ./programa
 gcc -o programa main.c -lws2_32
+
+
+{
+    "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+    "files.associations": {
+        "stdlib.h": "c",
+        "json.h": "c",
+        "string.h": "c",
+        "stdio.h": "c",
+        "buffer.h": "c"
+    },
+    "cmake.sourceDirectory": "C:/Users/PID UFOP/Documents/www/com/clone/json-c",
+    
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": true
+    
+    
+}
