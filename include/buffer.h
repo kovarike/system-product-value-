@@ -5,7 +5,7 @@
 #include <string.h>
 
 // Função para limpar o buffer de entrada
-void limparBuffer(){};
+void limparBuffer();
 
 
 #endif // BUFFER_H

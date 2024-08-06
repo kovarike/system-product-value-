@@ -8,5 +8,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "binary-id": "^1.7.9",
+    "zod": "^3.23.8"
+  }
 }

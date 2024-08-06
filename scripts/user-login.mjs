@@ -1,5 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs'
+import path from 'path'
+import { binary } from "binary-id"
+import { verificarInformacoes } from './auth/authUser.mjs';
+import { userSchema } from './schema/schemaUser.mjs';
 
 const JSON_FILE = 'data.json';
 const DIRETORY_DATA = '.data';
@@ -41,11 +44,13 @@ function Dir(pathDir){
  */
 function salvarInformacoes(nome, email, senha, cnpj) {
     const jsonObject = {
+        id: binary.UUID(),
         nome: nome,
         email: email,
         senha: senha,
         cnpj: cnpj
     };
+    const data = userSchema.safeParse(jsonObject);
 
     Dir(DIRETORY_DATA);
     const filePath = path.join(DIRETORY_DATA, JSON_FILE);
@@ -69,31 +74,7 @@ function salvarInformacoes(nome, email, senha, cnpj) {
     });
 }
 
-/**
- * Função para verificar as informações no arquivo JSON.
- * @param {string} nome - Nome do usuário.
- * @param {string} email - Email do usuário.
- * @param {string} senha - Senha do usuário.
- * @param {string} cnpj - CNPJ do usuário.
- * @returns {boolean} - Retorna verdadeiro se as informações estiverem corretas, caso contrário, falso.
- */
-function verificarInformacoes(nome, email, senha, cnpj) {
-    try {
-        const data = fs.readFileSync(JSON_FILE, 'utf8');
-        const jsonObject = JSON.parse(data);
 
-        const info = jsonObject.nome === nome &&
-            jsonObject.email === email &&
-            jsonObject.senha === senha &&
-            jsonObject.cnpj === cnpj;
-
-        console.log(info ? 'Informações corretas.' : 'Informações incorretas.');
-        return info;
-    } catch (err) {
-        console.error('Erro ao abrir o arquivo para leitura ou analisar JSON:', err);
-        return false;
-    }
-}
 
 const args = process.argv.slice(2);
 const command = args[0];

@@ -199,7 +199,7 @@
 
 
 
-#define SCRIPT_PATH "js/user-login.js"
+#define SCRIPT_PATH "scripts/user-login.mjs"
 
 // Função para executar um comando no terminal
 int executarComando(const char *comando) {
@@ -241,12 +241,12 @@ void salvarInformacoes(const char *nome, const char *email, const char *senha, c
 }
 
 // Função para verificar as informações do usuário usando o script Node.js
-int verificarInformacoes(const char *nome, const char *email, const char *senha, const char *cnpj) {
-    char comando[1024];
-    snprintf(comando, sizeof(comando), "node \"%s\" verificar \"%s\" \"%s\" \"%s\" \"%s\"", SCRIPT_PATH, nome, email, senha, cnpj);
-    int resultado = executarComando(comando);
-    return resultado == 0 ? 1 : 0;
-}
+// int verificarInformacoes(const char *nome, const char *email, const char *senha, const char *cnpj) {
+//     char comando[1024];
+//     snprintf(comando, sizeof(comando), "node \"%s\" verificar \"%s\" \"%s\" \"%s\" \"%s\"", SCRIPT_PATH, nome, email, senha, cnpj);
+//     int resultado = executarComando(comando);
+//     return resultado == 0 ? 1 : 0;
+// }
 
 // Função de login do usuário
 int login() {
@@ -277,13 +277,13 @@ int login() {
     // Salva informações no arquivo JSON
     salvarInformacoes(nome, email, senha, cnpj);
 
-    int resultado = verificarInformacoes(nome, email, senha, cnpj);
+    // int resultado = verificarInformacoes(nome, email, senha, cnpj);
 
-    // Mensagens de feedback mais detalhadas
-    if (resultado == 0) {
-        printf("Informações incorretas! Verifique os dados e tente novamente.\n");
-        return -1;  // Indica falha no login
-    }
+    // // Mensagens de feedback mais detalhadas
+    // if (resultado == 0) {
+    //     printf("Informações incorretas! Verifique os dados e tente novamente.\n");
+    //     return -1;  // Indica falha no login
+    // }
 
     printf("Informações corretas! Acesso concedido.\n");
 
