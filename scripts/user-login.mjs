@@ -1,39 +1,11 @@
-import fs from 'fs'
-import path from 'path'
-import { binary } from "binary-id"
-import { verificarInformacoes } from './auth/authUser.mjs';
+import fs from 'fs';
+import path from 'path';
+import { binary } from 'binary-id';
 import { userSchema } from './schema/schemaUser.mjs';
+import { verificarInformacoes } from './auth/authUser.mjs';
 
 const JSON_FILE = 'data.json';
-const DIRETORY_DATA = '.data';
-
-
-/**
- * @param {string} pathDir
- */
-function Dir(pathDir){
-    return new Promise((resolve, reject) => {
-        // Simula um atraso de 3 segundos
-        setTimeout(() => {
-            if (!fs.existsSync(pathDir)) {
-                fs.mkdir(pathDir, { recursive: true }, (err) => {
-                    if (err) {
-                        reject(`Erro ao criar o diretório: ${err.message}`);
-                    } else {
-                        console.log(`Diretório criado: ${pathDir}`);
-                        resolve();
-                    }
-                });
-            } else {
-                console.log(`Diretório já existe: ${pathDir}`);
-                resolve(); // Diretório já existe
-            }
-        }, 3000); // Atraso de 3 segundos
-    });
-
-}
-
-
+const DIR_DATA = '.data';
 
 /**
  * Função para salvar informações no arquivo JSON.
@@ -45,41 +17,71 @@ function Dir(pathDir){
 function salvarInformacoes(nome, email, senha, cnpj) {
     const jsonObject = {
         id: binary.UUID(),
-        nome: nome,
+        name: nome,
         email: email,
-        senha: senha,
+        password: senha,
         cnpj: cnpj
     };
-    const data = userSchema.safeParse(jsonObject);
 
-    Dir(DIRETORY_DATA);
-    const filePath = path.join(DIRETORY_DATA, JSON_FILE);
-    return new Promise((resolve, reject) => {
-        // Simula um atraso de 3 segundos
-        setTimeout(() => {
-            // Salva as informações no arquivo JSON
-           if(fs.existsSync(filePath)){
-            console.log("Error ao salvar as informações, você já tem um acesso autorizado, verifique as suas informações de login:");
-           }else{
-            fs.writeFile(filePath, JSON.stringify(jsonObject, null, 2), (err) => {
-                if (err) {
-                    reject(`Erro ao salvar informações no arquivo JSON: ${err.message}`);
-                } else {
-                    console.log('Informações salvas com sucesso no arquivo JSON.');
-                    resolve();
-                }
-            });
-           }
-        }, 3000); // Atraso de 3 segundos
-    });
+    const { success, data, error } = userSchema.safeParse(jsonObject);
+
+    if (!success) {
+        console.error(`Erro na validação dos dados: ${error.errors.map(e => e.message).join(', ')}`);
+        return;
+    }
+
+    if (!fs.existsSync(DIR_DATA)) {
+        try {
+            fs.mkdirSync(DIR_DATA, { recursive: true });
+            console.log(`Diretório criado: ${DIR_DATA}`);
+        } catch (err) {
+            console.error(`Erro ao criar o diretório: ${err.message}`);
+            return;
+        }
+    } else {
+        console.log(`Diretório já existe: ${DIR_DATA}`);
+    }
+
+    const filePath = path.join(DIR_DATA, JSON_FILE);
+
+    try {
+        if (fs.existsSync(filePath)) {
+            console.log(`O arquivo ${JSON_FILE} já existe.`);
+            // Se deseja atualizar o arquivo existente, remova o bloco abaixo.
+            return;
+        }
+
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+        console.log('Informações salvas com sucesso no arquivo JSON.');
+    } catch (err) {
+        console.error(`Erro ao salvar informações no arquivo JSON: ${err.message}`);
+    }
+
+    return data;
 }
-
-
 
 const args = process.argv.slice(2);
 const command = args[0];
+
 if (command === 'salvar') {
+    if (args.length < 5) {
+        console.error('Número insuficiente de argumentos. Uso: node script.js salvar <nome> <email> <senha> <cnpj>');
+        process.exit(1);
+    }
+
     salvarInformacoes(args[1], args[2], args[3], args[4]);
+
 } else if (command === 'verificar') {
-    verificarInformacoes(args[1], args[2], args[3], args[4]);
+    if (args.length < 4) {
+        console.error('Número insuficiente de argumentos. Uso: node script.js verificar <email> <senha>');
+        process.exit(1);
+    }
+
+    const data = salvarInformacoes(args[1], args[2], args[3], args[4]);
+    if (data) {
+        verificarInformacoes(args[1], args[2], data.id);
+    }
+} else {
+    console.error('Comando desconhecido. Use "salvar" ou "verificar".');
+    process.exit(1);
 }
