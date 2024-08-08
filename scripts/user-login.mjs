@@ -72,7 +72,7 @@ if (command === 'salvar') {
     salvarInformacoes(args[1], args[2], args[3], args[4]);
 
 } else if (command === 'verificar') {
-    if (args.length < 4) {
+    if (args.length < 5) {
         console.error('Número insuficiente de argumentos. Uso: node script.js verificar <email> <senha>');
         process.exit(1);
     }

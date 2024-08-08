@@ -5,7 +5,8 @@
         "json.h": "c",
         "string.h": "c",
         "stdio.h": "c",
-        "buffer.h": "c"
+        "buffer.h": "c",
+        "locale.h": "c"
     },
     "cmake.sourceDirectory": "C:/Users/PID UFOP/Documents/www/com/clone/json-c",
     
